@@ -106,16 +106,16 @@ describe('MasterCard', function() {
   //   http://chaijs.com/api/bdd/
   var expect = chai.expect;
 
-  it(FILL_ME_IN, function() {
-    expect(detectNetwork('5112345678901234')).to.equal('MasterCard');
+  it('has prefix of 51 and a length of 16', function() {
+    detectNetwork('5112345678901234').should.equal('MasterCard');
   });
 
-  it(FILL_ME_IN, function() {
-    expect(detectNetwork('5212345678901234')).to.equal('MasterCard');
+  it('has prefix of 52 and a length of 16', function() {
+    detectNetwork('5212345678901234').should.equal('MasterCard');
   });
 
-  it(FILL_ME_IN, function() {
-    expect(detectNetwork('5312345678901234')).to.equal('MasterCard');
+  it('has prefix of 53 and a length of 16', function() {
+    detectNetwork('5312345678901234').should.equal('MasterCard');
   });
 
 
@@ -141,10 +141,44 @@ describe('MasterCard', function() {
 describe('Discover', function() {
   // Tests without a function will be marked as "pending" and not run
   // Implement these tests (and others) and make them pass!
-  it('has a prefix of 6011 and a length of 16');
-  it('has a prefix of 6011 and a length of 19');
+  it('has a prefix of 6011 and a length of 16', function() {
+    detectNetwork('6011234567845675').should.equal('Discover');
+  });
+
+  it('has a prefix of 6011 and a length of 19', function() {
+    detectNetwork('6011234567845675123').should.equal('Discover');
+  });
+
+  it('has a prefix of 65 and a length of 16', function() {
+    detectNetwork('6511234567845675').should.equal('Discover');
+  });
+
+  it('has a prefix of 65 and a length of 19', function() {
+    detectNetwork('6511234567845675123').should.equal('Discover');
+  });
+
+  for (var prefix = 644; prefix <= 649; prefix++) {
+    (function(prefix) {
+      it('has a prefix of ' + prefix + ' and a length of 16', function() {
+        detectNetwork(prefix+'1234567890123').should.equal('Discover');
+      });
+      it('has a prefix of ' + prefix + ' and a length of 19', function() {
+        detectNetwork(prefix+'1234567890123456').should.equal('Discover');
+      });
+    })(prefix)};
+
 });
 
 describe('Maestro', function() {
-  // Write full test coverage for the Maestro card
+  var prefixes = ['5018', '5020', '5038', '6304'];
+  for (var i=12; i<=19; i++) {
+    for (var p = 0; p<prefixes.length; p++) {
+      (function(index, prefix) { it('has a prefix of ' + prefix + ' and a length of '+index, function() {
+          var cardNumber = prefix+'123456789012345';
+          var cardSubstr = cardNumber.substr(0, index);
+          detectNetwork(cardSubstr).should.equal('Maestro');
+        });
+      })(i, prefixes[p]);
+    }
+  }
 });
