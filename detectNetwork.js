@@ -19,7 +19,7 @@ var detectNetwork = function(cardNumber) {
   var networks = [
     new Network("Visa", [4], [13, 16, 19]),
     new Network("Discover", [6011, 644, 645, 646, 647, 648, 649, 65], [16, 19]),
-    new Network("Maestro", [5018, 5020, 5032], [12, 13, 14, 15, 16, 17, 18, 19]),
+    new Network("Maestro", [5018, 5020, 5038, 6304], [12, 13, 14, 15, 16, 17, 18, 19]),
     new Network("MasterCard", [51,52,53,54,55],[16]),
     new Network("Diner's Club", [38,39], [14]),
     new Network("American Express", [34, 37], [15]),
