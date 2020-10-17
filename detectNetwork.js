@@ -18,6 +18,8 @@ var detectNetwork = function(cardNumber) {
 
   var networks = [
     new Network("Visa", [4], [13, 16, 19]),
+    new Network("Discover", [6011, 644, 645, 646, 647, 648, 649, 65], [16, 19]),
+    new Network("Maestro", [5018, 5020, 5032], [12, 13, 14, 15, 16, 17, 18, 19]),
     new Network("MasterCard", [51,52,53,54,55],[16]),
     new Network("Diner's Club", [38,39], [14]),
     new Network("American Express", [34, 37], [15]),
@@ -26,20 +28,19 @@ var detectNetwork = function(cardNumber) {
   var prefix = cardNumber.substr(0,2);
   var cardLength = cardNumber.length;
 
-  //Special Case for Visa
-  var visaIndex = networks.findIndex(function(item) {return item.name === "Visa"});
-  if(cardNumber.substr(0,1) === '4' && networks[visaIndex]['length'].includes(cardLength)) {
-    return "Visa";
-  }
-
   // Iterate through all networks
   for (var i = 0; i<networks.length; i++) {
     var network = networks[i];
-    if(network.prefixes.includes(parseInt(prefix))) {
-      if (network.length.includes(cardLength)) {
-        return network.name;
+    //Iterate through each prefix in the current network object
+    for (var p = 0; p<network.prefixes.length; p++) {
+      var prefixTest = network.prefixes[p];
+      if(cardNumber.startsWith(prefixTest)) { //compare the current ,prefix and see if the cardNumber starts with it
+        if (network.length.includes(cardLength)) { //if the card length is a valid length for the current Network..
+          return network.name;
+        }
       }
     }
+
   }
   console.log("Card Network not Detected");
   // Note: `cardNumber` will always be a string
