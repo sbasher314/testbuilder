@@ -182,3 +182,43 @@ describe('Maestro', function() {
     }
   }
 });
+
+function rangeList(num1, num2) {
+  var higher = (num1>num2)?num1:num2;
+  var lower  = (num1<num2)?num1:num2;
+  var array  = [];
+  for(var i = lower; i<=higher; i++) {
+    array.push(i);
+  }
+  return array;
+}
+
+describe('China UnionPay', function() {
+  var prefixes = [ rangeList(622126,622925),624,625,626, rangeList(6282,6288)].flat();
+  for (var i=16; i<=19; i++) {
+    for (var p = 0; p<prefixes.length; p++) {
+      (function(index, prefix) { it('has a prefix of ' + prefix + ' and a length of '+index, function() {
+          var cardNumber = prefix+'123456789012345123';
+          var cardSubstr = cardNumber.substr(0, index);
+          detectNetwork(cardSubstr).should.equal('China UnionPay');
+        });
+      })(i, prefixes[p]);
+    }
+  }
+});
+
+describe('Switch', function() {
+  var prefixes = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+  var lengths = [16, 18, 19]
+  for (var i=0; i<lengths.length; i++) {
+    var length = lengths[i]
+    for (var p = 0; p<prefixes.length; p++) {
+      (function(index, prefix) { it('has a prefix of ' + prefix + ' and a length of '+index, function() {
+          var cardNumber = prefix+'123456789012345123';
+          var cardSubstr = cardNumber.substr(0, index);
+          detectNetwork(cardSubstr).should.equal('Switch');
+        });
+      })(length, prefixes[p]);
+    }
+  }
+});
